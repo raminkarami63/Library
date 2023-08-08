@@ -47,4 +47,71 @@ export default class BookController {
         });
       }
     };
+
+    static addBook = async (req, res) => {
+      if (req.body.title && req.body.author) {
+        const title = req.body.title;
+        const author = req.body.author;
+        try {
+          const book = await DB.addBook(title, author);
+          res.status(201).json({
+            success: true,
+            body: null,
+            message: "Book created",
+          });
+        } catch (e) {
+          res.status(500).json({
+            success: false,
+            body: null,
+            message: "Internal Server Error",
+          });
+        }
+      } else {
+        res.status(400).json({
+          success: false,
+          body: null,
+          message: "Please send new book title",
+        });
+      }
+    };
+
+    static updateBook = async (req, res) => {
+      if (
+        req.body.members_id &&
+        req.body.date_of_borrow!== undefined
+      ) {
+        const { members_id, date_of_borrow } = req.body;
+        const id = req.params.id;
+  
+        const book = await DB.getBookById(id);
+        if (book) {
+          try {
+            await DB.updateBook(members_id, date_of_borrow, id);
+            res.json({
+              success: true,
+              body: null,
+              message: "Book updated",
+            });
+          } catch (e) {
+            res.status(500).json({
+              success: false,
+              body: null,
+              message: "Internal Server Error",
+            });
+          }
+        } else {
+          res.status(404).json({
+            success: false,
+            body: null,
+            message: "Book not found",
+          });
+        }
+      } else {
+        res.status(400).json({
+          success: false,
+          body: null,
+          message: "Please provide 'members_id', 'date_of_borroe'",
+        });
+      }
+    };
 }
