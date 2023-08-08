@@ -22,4 +22,29 @@ export default class BookController {
         });
       }
     };
+
+    static getBookById = async (req, res) => {
+      try {
+        const book = await DB.getBookById(req.params.id);
+        if (book) {
+          res.json({
+            success: true,
+            body: book,
+            message: "The book fetched successfully",
+          });
+        } else {
+          res.status(404).json({
+            success: false,
+            body: null,
+            message: "book not found",
+          });
+        }
+      } catch (e) {
+        res.status(500).json({
+          success: false,
+          body: null,
+          message: "Internal Server Error",
+        });
+      }
+    };
 }
