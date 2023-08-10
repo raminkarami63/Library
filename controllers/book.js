@@ -110,8 +110,32 @@ export default class BookController {
         res.status(400).json({
           success: false,
           body: null,
-          message: "Please provide 'members_id', 'date_of_borroe'",
+          message: "Please provide 'members_id', 'date_of_borrow'",
         });
       }
     };
+
+    static deleteBook(req, res) {
+      try {
+        if (DB.deleteBook(req.params.id)) {
+          res.json({
+            success: true,
+            body: null,
+            message: "The book deleted",
+          });
+        } else {
+          res.status(404).json({
+            success: false,
+            body: null,
+            message: "book not found",
+          });
+        }
+      } catch (e) {
+        res.status(500).json({
+          success: false,
+          body: null,
+          message: "Internal Server Error",
+        });
+      }
+    }
 }

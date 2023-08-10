@@ -84,4 +84,20 @@ export default class DB {
         console.log(error);
       }
     };
+
+    static deleteBook = async (id) => {
+      const client = new Client({
+        host: "localhost",
+        port: 5432,
+        user: "postgres",
+        password: "21020",
+        database: "library",
+      });
+      const qr = `DELETE FROM public.books WHERE id = ${id}`;
+      client.connect();
+      client.query(qr, (err, res) => {
+        client.end();
+        return true;
+      });
+    };
 }
